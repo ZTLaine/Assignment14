@@ -24,4 +24,13 @@ public class UserService {
     public User getUserById(int id) {
         return userRepository.findById(id);
     }
+
+    public Integer numberOfUsers() {
+        return users.size();
+    }
+
+    public void add(String username) {
+        User newUser = new User(numberOfUsers()+1, username);
+        users.add(newUser);
+    }
 }
