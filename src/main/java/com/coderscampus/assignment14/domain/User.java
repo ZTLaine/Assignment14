@@ -10,7 +10,12 @@ public class User {
     private String username;
     private Instant createdAt;
 
-    public User(Integer userId,String username) {
+    public User() {
+        this.userId = null;
+        this.createdAt = Instant.now();
+    }
+
+    public User(Integer userId, String username) {
         this.userId = userId;
         this.username = username;
         this.createdAt = Instant.now();
