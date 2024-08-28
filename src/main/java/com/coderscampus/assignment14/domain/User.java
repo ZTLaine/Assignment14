@@ -20,4 +20,10 @@ public class User {
         this.username = username;
         this.createdAt = Instant.now();
     }
+
+    public User(String username) {
+        this.userId = null;
+        this.username = username;
+        this.createdAt = Instant.now();
+    }
 }

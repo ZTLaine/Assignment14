@@ -26,15 +26,19 @@ public class UserService {
     }
 
     public Integer numberOfUsers() {
+        findAllUsers();
         return users.size();
     }
 
-    public void addUser(User user) {
-        if(user.getUserId() != null){
-            user.setUserId(numberOfUsers()+1);
+    public User addUser(String username) {
+        User user = new User(username);
+        if(user.getUserId() == null){
+            user.setUserId(numberOfUsers());
         }
         users.add(user);
         System.out.println("New user: " + user + " added");
         userRepository.save(user);
+
+        return user;
     }
 }

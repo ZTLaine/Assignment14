@@ -27,7 +27,12 @@ public class UserRepository {
         return null;
     }
 
-    public void save(User newUser) {
-        users.add(newUser);
+    public void save(User user) {
+        User existingUser = findById(user.getUserId());
+        if(existingUser != null){
+
+        }else{
+            users.add(user);
+        }
     }
 }
