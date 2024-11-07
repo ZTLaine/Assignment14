@@ -11,4 +11,20 @@ public class ChannelService {
     private ChannelRepository channelRepository;
 
     private List<Channel> channels;
+
+    public Channel findbyId(Long channelId) {
+        return channels.get((int) (channelId-1));
+    }
+
+    public List<Channel> findAllChannels() {
+        return channels;
+    }
+
+    public Channel addChannel(String channelName) {
+        Channel newChannel = new Channel();
+        newChannel.setName(channelName);
+        newChannel.setId(channels.size());
+        channels.add(newChannel);
+        return newChannel;
+    }
 }
