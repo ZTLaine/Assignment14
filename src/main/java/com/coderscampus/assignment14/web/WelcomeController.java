@@ -7,17 +7,16 @@ import com.coderscampus.assignment14.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class WelcomeController {
-    UserService userService;
+    private final UserService userService;
+    private final ChannelService channelService;
 
     WelcomeController(UserService userService, ChannelService channelService) {
         this.userService = userService;
+        this.channelService = channelService;
     }
 
     @GetMapping("/welcome")
@@ -27,8 +26,8 @@ public class WelcomeController {
     }
 
     @PostMapping("/welcome")
-    public String postWelcome(@RequestParam User username) {
-        User newUser = userService.addUser(username.getUsername());
+    public String postWelcome(@ModelAttribute User user) {
+        User newUser = userService.addUser(user.getUsername());
         System.out.println(newUser.getUsername());
 
 

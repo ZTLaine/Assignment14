@@ -9,15 +9,15 @@ import java.util.List;
 
 @Service
 public class UserService {
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final ChannelService channelService;
 
     private List<User> users;
-    private ChannelService channelService;
 
-    public UserService() {
-        userRepository = new UserRepository();
+    public UserService(UserRepository userRepository, ChannelService channelService) {
+        this.userRepository = userRepository;
+        this.channelService = channelService;
         users = new ArrayList<>();
-        channelService = new ChannelService();
         findAllUsers();
     }
 
