@@ -15,11 +15,9 @@ import java.util.List;
 @Controller
 public class ChannelController {
     private final ChannelService channelService;
-    private final UserService userService;
 
-    public ChannelController(ChannelService channelService, UserService userService) {
+    public ChannelController(ChannelService channelService) {
         this.channelService = channelService;
-        this.userService = userService;
     }
 
     @GetMapping("/channels")

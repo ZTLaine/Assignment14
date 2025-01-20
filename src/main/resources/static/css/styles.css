@@ -1,0 +1,82 @@
+:root {
+    /* Primary colors */
+    --gold-metallic: #bb8a44;
+    --olive-brown: #80673b;
+    --cream: #f5e1b9;
+    --dark-olive: #5a5034;
+    
+    /* Secondary colors */
+    --pale-gold: #f6d573;
+    --charcoal: #464232;
+    --tan: #d8af7f;
+    --golden-yellow: #e2b553;
+    
+    /* Accent colors */
+    --forest-green: #5f6f3a;
+    --taupe: #8e7d69;
+    --moss-green: #495635;
+    --olive-green: #909f43;
+
+    /* Semantic color assignments */
+    --primary-text: var(--charcoal);
+    --secondary-text: var(--olive-brown);
+    --background-primary: var(--cream);
+    --background-secondary: var(--pale-gold);
+    --accent: var(--forest-green);
+    --border: var(--taupe);
+}
+
+/* Move existing styles here and update with new colors */
+.chat-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: var(--background-primary);
+}
+
+.messages {
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+.message {
+    margin: 10px 0;
+    padding: 5px;
+}
+
+.message .sender {
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.message .timestamp {
+    color: var(--secondary-text);
+    font-size: 0.8em;
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+}
+
+#messageInput {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid var(--border);
+}
+
+#sendButton {
+    padding: 8px 16px;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#sendButton:hover {
+    background-color: var(--moss-green);
+} 

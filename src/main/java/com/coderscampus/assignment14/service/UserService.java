@@ -49,4 +49,11 @@ public class UserService {
 
         return user;
     }
+
+    public User findByUsername(String username) {
+        return users.stream()
+                .filter(user -> user.getUsername().equals(username))
+                .findFirst()
+                .orElse(null);
+    }
 }

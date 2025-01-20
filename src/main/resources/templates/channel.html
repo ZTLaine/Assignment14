@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${channel.name}">Channel</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+    <div class="chat-container">
+        <h1 th:text="${channel.name}">Channel Name</h1>
+        <a href="/channels">Back to Channels</a>
+        
+        <div id="messages" class="messages">
+        </div>
 
+        <div class="input-container">
+            <input type="text" id="messageInput" placeholder="Type your message...">
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        // This data needs to be available to channel.js
+        window.CHAT_CONFIG = {
+            channelId: [[${channel.id}]]
+        };
+    </script>
+    <script src="/js/channel.js"></script>
 </body>
 </html>
