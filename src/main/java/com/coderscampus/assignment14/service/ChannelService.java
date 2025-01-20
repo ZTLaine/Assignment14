@@ -4,35 +4,32 @@ import com.coderscampus.assignment14.domain.Channel;
 import com.coderscampus.assignment14.repository.ChannelRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ChannelService {
     private final ChannelRepository channelRepository;
-    private List<Channel> channels;
 
     public ChannelService(ChannelRepository channelRepository) {
         this.channelRepository = channelRepository;
-        channels = new ArrayList<>();
     }
 
     public Channel findById(Long channelId) {
-        return channels.get((int) (channelId-1));
+        return channelRepository.findById(channelId.intValue());
     }
 
     public List<Channel> findAllChannels() {
+        List<Channel> channels = channelRepository.findAll();
         if (channels.isEmpty()) {
             addChannel("General");
         }
-        return channels;
+        return channelRepository.findAll();
     }
 
     public Channel addChannel(String channelName) {
         Channel newChannel = new Channel();
         newChannel.setName(channelName);
-        newChannel.setId(channels.size());
-        channels.add(newChannel);
-        return newChannel;
+        newChannel.setId(channelRepository.findAll().size());
+        return channelRepository.save(newChannel);
     }
 }

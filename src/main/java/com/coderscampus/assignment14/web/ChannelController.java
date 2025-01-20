@@ -25,19 +25,22 @@ public class ChannelController {
     @GetMapping("/channels")
     public String channels(Model model) {
         List<Channel> channels = channelService.findAllChannels();
-
         model.addAttribute("channels", channels);
         return "channels";
     }
 
     @GetMapping("/channel/{channelId}")
     public String getChannel(Model model, @PathVariable Long channelId) {
-        model.addAttribute("channel", channelService.findById(channelId));
+        Channel channel = channelService.findById(channelId);
+        if (channel == null) {
+            return "redirect:/channels";
+        }
+        model.addAttribute("channel", channel);
         return "channel";
     }
 
-    @PostMapping("channel/addChannel")
-    public  String addChannel(@RequestParam String name) {
+    @PostMapping("/channels/addChannel")
+    public String addChannel(@RequestParam String name) {
         Channel newChannel = channelService.addChannel(name);
         return "redirect:/channel/" + newChannel.getId();
     }
