@@ -5,6 +5,7 @@ import com.coderscampus.assignment14.domain.User;
 import com.coderscampus.assignment14.service.ChannelService;
 import com.coderscampus.assignment14.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,11 +27,9 @@ public class WelcomeController {
     }
 
     @PostMapping("/welcome")
-    public String postWelcome(@ModelAttribute User user) {
+    @ResponseBody
+    public ResponseEntity<?> postWelcome(@RequestBody User user) {
         User newUser = userService.addUser(user.getUsername());
-        System.out.println(newUser.getUsername());
-
-
-        return "redirect:/channels";
+        return ResponseEntity.ok().build();
     }
 }
