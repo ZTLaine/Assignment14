@@ -6,9 +6,9 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <div class="chat-container">
+    <div class="container">
         <h1 th:text="${channel.name}">Channel Name</h1>
-        <a href="/channels">Back to Channels</a>
+        <a href="/channels" class="back-link">Back to Channels</a>
         
         <div id="messages" class="messages">
         </div>
@@ -20,7 +20,6 @@
     </div>
 
     <script th:inline="javascript">
-        // This data needs to be available to channel.js
         window.CHAT_CONFIG = {
             channelId: [[${channel.id}]]
         };

@@ -6,24 +6,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const username = sessionStorage.getItem('username');
     let lastMessageId = -1;
 
-    // Redirect if no username
     if (!username) {
         window.location.href = '/welcome';
         return;
     }
 
     function formatTimestamp(timestamp) {
-        return new Date(timestamp).toLocaleTimeString();
+        return new Date(timestamp).toLocaleTimeString([], { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            hour12: true 
+        });
     }
 
     function addMessageToDisplay(message) {
         console.log('Adding message to display:', message);
         const messageDiv = document.createElement('div');
-        messageDiv.className = 'message';
+        const isOwnMessage = message.username === username;
+        messageDiv.className = `message ${isOwnMessage ? 'own-message' : 'other-message'}`;
         messageDiv.innerHTML = `
-            <span class="sender">${message.username}</span>
-            <span class="timestamp">${formatTimestamp(message.createdAt)}</span>
+            <div class="sender">${message.username}</div>
             <div class="content">${message.content}</div>
+            <div class="timestamp">${formatTimestamp(message.createdAt)}</div>
         `;
         messagesContainer.appendChild(messageDiv);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -50,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     });
 
-                    // If this is the first fetch, update lastMessageId to the latest message
                     if (lastMessageId === -1 && messages.length > 0) {
                         lastMessageId = Math.max(...messages.map(m => m.id));
                         console.log('Initial lastMessageId set to:', lastMessageId);
@@ -108,6 +111,18 @@ document.addEventListener('DOMContentLoaded', function() {
             if (content) {
                 sendMessage(content);
             }
+        }
+    });
+
+    messageInput.addEventListener('focus', function() {
+        if (this.placeholder === 'Type your message...') {
+            this.placeholder = '';
+        }
+    });
+
+    messageInput.addEventListener('blur', function() {
+        if (this.placeholder === '') {
+            this.placeholder = 'Type your message...';
         }
     });
 

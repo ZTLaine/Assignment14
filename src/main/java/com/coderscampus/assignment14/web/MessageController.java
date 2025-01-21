@@ -24,9 +24,9 @@ public class MessageController {
             @RequestParam(defaultValue = "-1") Integer after) {
         List<MessageDTO> messages = messageService.getMessagesForChannel(channelId, after)
             .stream()
-            .map(this::convertToDTO)
+            .map(messageService::convertToDTO)
             .toList();
-        
+            
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Messages retrieved successfully", messages));
     }
 
@@ -35,16 +35,6 @@ public class MessageController {
             @PathVariable Integer channelId,
             @RequestBody MessageDTO messageDTO) {
         Message message = messageService.createMessage(channelId, messageDTO.getUsername(), messageDTO.getContent());
-        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Message created successfully", convertToDTO(message)));
-    }
-
-    private MessageDTO convertToDTO(Message message) {
-        return new MessageDTO(
-            message.getId().longValue(),
-            message.getContent(),
-            message.getSender().getUsername(),
-            message.getChannel().getId().longValue(),
-            message.getCreatedAt().toEpochMilli()
-        );
+        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Message created successfully", messageService.convertToDTO(message)));
     }
 }

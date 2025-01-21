@@ -2,13 +2,16 @@ package com.coderscampus.assignment14.web;
 
 import com.coderscampus.assignment14.domain.Channel;
 import com.coderscampus.assignment14.service.ChannelService;
-import com.coderscampus.assignment14.service.UserService;
+import com.coderscampus.assignment14.web.response.ApiResponse;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -38,8 +41,13 @@ public class ChannelController {
     }
 
     @PostMapping("/channels/addChannel")
-    public String addChannel(@RequestParam String name) {
-        Channel newChannel = channelService.addChannel(name);
-        return "redirect:/channel/" + newChannel.getId();
+    @ResponseBody
+    public ResponseEntity<?> addChannel(@RequestBody Channel channel) {
+        try {
+            Channel newChannel = channelService.addChannel(channel.getName());
+            return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Channel created successfully", newChannel));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>("ERROR", e.getMessage(), null));
+        }
     }
 }

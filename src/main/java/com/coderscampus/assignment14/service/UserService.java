@@ -35,6 +35,10 @@ public class UserService {
     }
 
     public User addUser(String username) {
+        if (findByUsername(username) != null) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+
         User user = new User(username);
         if(user.getUserId() == null){
             user.setUserId(numberOfUsers());

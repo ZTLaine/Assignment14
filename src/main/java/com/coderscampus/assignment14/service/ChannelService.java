@@ -27,6 +27,11 @@ public class ChannelService {
     }
 
     public Channel addChannel(String channelName) {
+        if (channelRepository.findAll().stream()
+                .anyMatch(c -> c.getName().equalsIgnoreCase(channelName))) {
+            throw new IllegalArgumentException("Channel name already exists");
+        }
+
         Channel newChannel = new Channel();
         newChannel.setName(channelName);
         newChannel.setId(channelRepository.findAll().size());

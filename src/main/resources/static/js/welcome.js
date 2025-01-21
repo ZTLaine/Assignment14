@@ -1,48 +1,76 @@
-// Check if username exists in sessionStorage
-function checkUsername() {
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('usernameModal');
+    const joinBtn = document.getElementById('joinChatBtn');
+    const closeBtn = document.getElementsByClassName('close-modal')[0];
+    const submitBtn = document.getElementById('submitUsername');
+    const usernameInput = document.getElementById('usernameInput');
+
+    // Check if username exists in sessionStorage
     const username = sessionStorage.getItem('username');
-    if (!username) {
-        // Show username prompt if no username is stored
-        const newUsername = prompt('Please enter your username:');
-        if (newUsername && newUsername.trim()) {
-            // Store username and redirect
-            sessionStorage.setItem('username', newUsername.trim());
-            // Post the username to the server
-            submitUsername(newUsername.trim());
-        } else {
-            // If user cancels or enters empty string, ask again
-            checkUsername();
-        }
-    } else {
-        // If username exists, redirect to channels
+    if (username) {
         window.location.href = '/channels';
+        return;
     }
-}
 
-// Function to submit username to server
-function submitUsername(username) {
-    fetch('/welcome', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username: username })
-    })
-    .then(response => {
-        if (response.ok) {
-            window.location.href = '/channels';
-        } else {
-            console.error('Error submitting username');
-            sessionStorage.removeItem('username');
-            checkUsername();
+    joinBtn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        sessionStorage.removeItem('username');
-        checkUsername();
-    });
-}
+    }
 
-// Run check when page loads
-document.addEventListener('DOMContentLoaded', checkUsername); 
+    usernameInput.addEventListener('focus', function() {
+        if (this.placeholder === 'Enter your username') {
+            this.placeholder = '';
+        }
+    });
+
+    usernameInput.addEventListener('blur', function() {
+        if (this.placeholder === '') {
+            this.placeholder = 'Enter your username';
+        }
+    });
+
+    function submitUsername() {
+        const username = usernameInput.value.trim();
+        if (username) {
+            fetch('/welcome', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: username })
+            })
+            .then(response => response.json().catch(() => response))
+            .then(data => {
+                if (data.ok) {
+                    sessionStorage.setItem('username', username);
+                    window.location.href = '/channels';
+                } else if (data.result === 'ERROR') {
+                    alert(data.message || 'Username already exists');
+                    usernameInput.value = '';
+                    usernameInput.focus();
+                } else {
+                    console.error('Error submitting username');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    }
+
+    submitBtn.onclick = submitUsername;
+    usernameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            submitUsername();
+        }
+    });
+}); 

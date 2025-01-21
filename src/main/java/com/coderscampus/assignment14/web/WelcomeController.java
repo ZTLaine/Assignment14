@@ -4,6 +4,8 @@ import com.coderscampus.assignment14.domain.Channel;
 import com.coderscampus.assignment14.domain.User;
 import com.coderscampus.assignment14.service.ChannelService;
 import com.coderscampus.assignment14.service.UserService;
+import com.coderscampus.assignment14.web.response.ApiResponse;
+
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -29,7 +31,11 @@ public class WelcomeController {
     @PostMapping("/welcome")
     @ResponseBody
     public ResponseEntity<?> postWelcome(@RequestBody User user) {
-        User newUser = userService.addUser(user.getUsername());
-        return ResponseEntity.ok().build();
+        try {
+            userService.addUser(user.getUsername());
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>("ERROR", e.getMessage(), null));
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.coderscampus.assignment14.service;
 import com.coderscampus.assignment14.domain.Channel;
 import com.coderscampus.assignment14.domain.Message;
 import com.coderscampus.assignment14.domain.User;
+import com.coderscampus.assignment14.dto.MessageDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -48,5 +49,15 @@ public class MessageService {
 
         channelMessages.computeIfAbsent(channelId, ArrayList::new).add(message);
         return message;
+    }
+
+    public MessageDTO convertToDTO(Message message) {
+        return new MessageDTO(
+            message.getId().longValue(),
+            message.getContent(),
+            message.getSender().getUsername(),
+            message.getChannel().getId().longValue(),
+            message.getCreatedAt().toEpochMilli()
+        );
     }
 }
