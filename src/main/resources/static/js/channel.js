@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function addMessageToDisplay(message) {
-        console.log('Adding message to display:', message);
         const messageDiv = document.createElement('div');
         const isOwnMessage = message.username === username;
         messageDiv.className = `message ${isOwnMessage ? 'own-message' : 'other-message'}`;
@@ -35,20 +34,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function fetchMessages() {
         try {
-            console.log('Fetching messages after ID:', lastMessageId);
             const response = await fetch(`/api/channel/${channelId}/messages?after=${lastMessageId}`);
             if (response.ok) {
                 const data = await response.json();
-                console.log('Received messages data:', data);
                 
                 if (data.result === 'SUCCESS' && Array.isArray(data.data)) {
                     const messages = data.data;
-                    // Sort messages by ID to ensure proper ordering
                     messages.sort((a, b) => a.id - b.id);
                     
                     messages.forEach(message => {
                         if (message.id > lastMessageId) {
-                            console.log('Updating lastMessageId from', lastMessageId, 'to', message.id);
                             lastMessageId = message.id;
                             addMessageToDisplay(message);
                         }
@@ -56,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     if (lastMessageId === -1 && messages.length > 0) {
                         lastMessageId = Math.max(...messages.map(m => m.id));
-                        console.log('Initial lastMessageId set to:', lastMessageId);
                     }
                 }
             } else {
@@ -76,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 createdAt: Date.now()
             };
 
-            console.log('Sending message:', messageDTO);
             const response = await fetch(`/api/channel/${channelId}/messages`, {
                 method: 'POST',
                 headers: {
@@ -87,7 +80,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Message send response:', data);
                 messageInput.value = '';
                 await fetchMessages();
             } else {
@@ -126,11 +118,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Initial fetch and polling setup
     fetchMessages();
     const pollInterval = setInterval(fetchMessages, 500);
-
-    // Cleanup on page unload
+    
     window.addEventListener('unload', () => {
         clearInterval(pollInterval);
     });

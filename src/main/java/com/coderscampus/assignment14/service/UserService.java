@@ -50,7 +50,6 @@ public class UserService {
         if (channelService.findAllChannels().isEmpty()){
             channelService.addChannel("General");
         }
-
         return user;
     }
 

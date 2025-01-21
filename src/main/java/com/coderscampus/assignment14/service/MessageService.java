@@ -4,33 +4,30 @@ import com.coderscampus.assignment14.domain.Channel;
 import com.coderscampus.assignment14.domain.Message;
 import com.coderscampus.assignment14.domain.User;
 import com.coderscampus.assignment14.dto.MessageDTO;
+import com.coderscampus.assignment14.repository.MessageRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class MessageService {
-    private final ConcurrentHashMap<Integer, List<Message>> channelMessages = new ConcurrentHashMap<>();
     private final AtomicInteger messageIdGenerator = new AtomicInteger(0);
     private final ChannelService channelService;
     private final UserService userService;
+    private final MessageRepository messageRepository;
 
-    public MessageService(ChannelService channelService, UserService userService) {
+    public MessageService(ChannelService channelService, UserService userService, MessageRepository messageRepository) {
         this.channelService = channelService;
         this.userService = userService;
+        this.messageRepository = messageRepository;
     }
 
     public List<Message> getMessagesForChannel(Integer channelId, Integer afterMessageId) {
-        List<Message> messages = channelMessages.getOrDefault(channelId, new ArrayList<>());
         if (afterMessageId == -1) {
-            return messages;
+            return messageRepository.findByChannelId(channelId);
         }
-        return messages.stream()
-                .filter(message -> message.getId() > afterMessageId)
-                .toList();
+        return messageRepository.findByChannelIdAfterMessageId(channelId, afterMessageId);
     }
 
     public Message createMessage(Integer channelId, String username, String content) {
@@ -47,8 +44,7 @@ public class MessageService {
         message.setSender(user);
         message.setChannel(channel);
 
-        channelMessages.computeIfAbsent(channelId, ArrayList::new).add(message);
-        return message;
+        return messageRepository.save(message);
     }
 
     public MessageDTO convertToDTO(Message message) {

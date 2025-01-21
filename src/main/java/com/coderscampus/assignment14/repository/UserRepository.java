@@ -30,7 +30,6 @@ public class UserRepository {
     public void save(User user) {
         User existingUser = findById(user.getUserId());
         if(existingUser != null){
-
         }else{
             users.add(user);
         }

@@ -25,8 +25,7 @@ public class MessageController {
         List<MessageDTO> messages = messageService.getMessagesForChannel(channelId, after)
             .stream()
             .map(messageService::convertToDTO)
-            .toList();
-            
+            .toList();    
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Messages retrieved successfully", messages));
     }
 

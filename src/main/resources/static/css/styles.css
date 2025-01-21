@@ -17,7 +17,6 @@
     --moss-green: #495635;
     --olive-green: #909f43;
 
-    /* Semantic color assignments */
     --primary-text: var(--charcoal);
     --secondary-text: var(--olive-brown);
     --background-primary: var(--cream);
@@ -39,7 +38,6 @@
     margin-top: 10px;
     margin-bottom: 20px;
 }
-
 
 .back-link {
     position: absolute;

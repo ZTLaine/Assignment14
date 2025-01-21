@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitBtn = document.getElementById('submitUsername');
     const usernameInput = document.getElementById('usernameInput');
 
-    // Check if username exists in sessionStorage
     const username = sessionStorage.getItem('username');
     if (username) {
         window.location.href = '/channels';
