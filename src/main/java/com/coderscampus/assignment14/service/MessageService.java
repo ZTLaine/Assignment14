@@ -23,16 +23,21 @@ public class MessageService {
         this.messageRepository = messageRepository;
     }
 
-    public List<Message> getMessagesForChannel(Integer channelId, Integer afterMessageId) {
+    public List<MessageDTO> getMessagesForChannel(Integer channelId, Integer afterMessageId) {
+        List<Message> messages;
         if (afterMessageId == -1) {
-            return messageRepository.findByChannelId(channelId);
+            messages = messageRepository.findByChannelId(channelId);
+        } else {
+            messages = messageRepository.findByChannelIdAfterMessageId(channelId, afterMessageId);
         }
-        return messageRepository.findByChannelIdAfterMessageId(channelId, afterMessageId);
+        return messages.stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 
-    public Message createMessage(Integer channelId, String username, String content) {
+    public MessageDTO createMessage(Integer channelId, MessageDTO messageDTO) {
         Channel channel = channelService.findById(channelId.longValue());
-        User user = userService.findByUsername(username);
+        User user = userService.findByUsername(messageDTO.getUsername());
         
         if (channel == null || user == null) {
             throw new IllegalArgumentException("Invalid channel or user");
@@ -40,11 +45,11 @@ public class MessageService {
 
         Message message = new Message();
         message.setId(messageIdGenerator.incrementAndGet());
-        message.setContent(content);
+        message.setContent(messageDTO.getContent());
         message.setSender(user);
         message.setChannel(channel);
 
-        return messageRepository.save(message);
+        return convertToDTO(messageRepository.save(message));
     }
 
     public MessageDTO convertToDTO(Message message) {
