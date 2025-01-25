@@ -5,14 +5,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 public class UserRepository {
-    private List<User> users;
-
-    public UserRepository() {
-        users = new ArrayList<User>();
-    }
+    private final List<User> users = new ArrayList<>();
+    private final AtomicInteger idGenerator = new AtomicInteger(0);
 
     public List<User> findAll() {
         return users;
@@ -27,11 +25,11 @@ public class UserRepository {
         return null;
     }
 
-    public void save(User user) {
-        User existingUser = findById(user.getUserId());
-        if(existingUser != null){
-        }else{
-            users.add(user);
+    public User save(User user) {
+        if (user.getUserId() == null) {
+            user.setUserId(idGenerator.getAndIncrement());
         }
+        users.add(user);
+        return user;
     }
 }

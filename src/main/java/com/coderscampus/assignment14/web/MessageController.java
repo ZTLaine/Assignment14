@@ -1,6 +1,5 @@
 package com.coderscampus.assignment14.web;
 
-import com.coderscampus.assignment14.domain.Message;
 import com.coderscampus.assignment14.dto.MessageDTO;
 import com.coderscampus.assignment14.service.MessageService;
 import com.coderscampus.assignment14.web.response.ApiResponse;
@@ -22,10 +21,7 @@ public class MessageController {
     public ResponseEntity<ApiResponse<List<MessageDTO>>> getMessages(
             @PathVariable Integer channelId,
             @RequestParam(defaultValue = "-1") Integer after) {
-        List<MessageDTO> messages = messageService.getMessagesForChannel(channelId, after)
-            .stream()
-            .map(messageService::convertToDTO)
-            .toList();    
+        List<MessageDTO> messages = messageService.getMessagesForChannel(channelId, after);
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Messages retrieved successfully", messages));
     }
 
@@ -33,7 +29,7 @@ public class MessageController {
     public ResponseEntity<ApiResponse<MessageDTO>> createMessage(
             @PathVariable Integer channelId,
             @RequestBody MessageDTO messageDTO) {
-        Message message = messageService.createMessage(channelId, messageDTO.getUsername(), messageDTO.getContent());
-        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Message created successfully", messageService.convertToDTO(message)));
+        MessageDTO createdMessage = messageService.createMessage(channelId, messageDTO);
+        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Message created successfully", createdMessage));
     }
 }

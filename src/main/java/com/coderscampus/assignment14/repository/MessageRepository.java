@@ -5,15 +5,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Repository
 public class MessageRepository {
-    private final List<Message> messages;
-
-    public MessageRepository() {
-        this.messages = new ArrayList<>();
-    }
+    private final List<Message> messages = new ArrayList<>();
+    private final AtomicInteger idGenerator = new AtomicInteger(0);
 
     public List<Message> findByChannelId(Integer channelId) {
         return messages.stream()
@@ -29,6 +27,9 @@ public class MessageRepository {
     }
 
     public Message save(Message message) {
+        if (message.getId() == null) {
+            message.setId(idGenerator.getAndIncrement());
+        }
         messages.add(message);
         return message;
     }

@@ -22,7 +22,8 @@ public class UserService {
     }
 
     public void findAllUsers() {
-        users = userRepository.findAll();
+        users.clear();
+        users.addAll(userRepository.findAll());
     }
 
     public User getUserById(int id) {
@@ -40,13 +41,9 @@ public class UserService {
         }
 
         User user = new User(username);
-        if(user.getUserId() == null){
-            user.setUserId(numberOfUsers());
-        }
-        users.add(user);
-        System.out.println("New user: " + user + " added");
         userRepository.save(user);
-
+        users.add(user);
+        
         if (channelService.findAllChannels().isEmpty()){
             channelService.addChannel("General");
         }

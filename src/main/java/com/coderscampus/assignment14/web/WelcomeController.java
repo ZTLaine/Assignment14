@@ -1,10 +1,9 @@
 package com.coderscampus.assignment14.web;
 
-import com.coderscampus.assignment14.domain.Channel;
 import com.coderscampus.assignment14.domain.User;
-import com.coderscampus.assignment14.service.ChannelService;
 import com.coderscampus.assignment14.service.UserService;
 import com.coderscampus.assignment14.web.response.ApiResponse;
+
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +14,9 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class WelcomeController {
     private final UserService userService;
-    private final ChannelService channelService;
 
-    WelcomeController(UserService userService, ChannelService channelService) {
+    WelcomeController(UserService userService) {
         this.userService = userService;
-        this.channelService = channelService;
     }
 
     @GetMapping("/welcome")
