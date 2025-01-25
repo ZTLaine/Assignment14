@@ -240,6 +240,16 @@ body {
 
 .modal-body {
     margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.modal-body input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
 }
 
 .modal-footer {
