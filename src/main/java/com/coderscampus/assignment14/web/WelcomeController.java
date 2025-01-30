@@ -4,8 +4,6 @@ import com.coderscampus.assignment14.domain.User;
 import com.coderscampus.assignment14.service.UserService;
 import com.coderscampus.assignment14.web.response.ApiResponse;
 
-
-import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +18,7 @@ public class WelcomeController {
     }
 
     @GetMapping("/welcome")
-    public String getWelcome(Model model, HttpSession session) {
+    public String getWelcome(Model model) {
         model.addAttribute("user", new User());
         return "welcome";
     }
@@ -34,5 +32,10 @@ public class WelcomeController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new ApiResponse<>("ERROR", e.getMessage(), null));
         }
+    }
+
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/welcome";
     }
 }

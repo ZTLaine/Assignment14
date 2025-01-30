@@ -5,6 +5,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const span = document.getElementsByClassName('close-modal')[0];
     const createBtn = document.getElementById('createChannelBtn');
 
+    const username = sessionStorage.getItem('username');
+    if (!username) {
+        window.location.href = '/welcome';
+    }
+
     btn.onclick = function() {
         modal.style.display = "block";
         channelNameInput.focus();
@@ -34,13 +39,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function createChannel() {
         const channelName = channelNameInput.value.trim();
+        const username = sessionStorage.getItem('username');
+        
+        if (!username) {
+            window.location.href = '/welcome';
+            return;
+        }
+        
         if (channelName) {
             fetch('/channels/addChannel', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name: channelName })
+                body: JSON.stringify({ 
+                    name: channelName,
+                    username: username 
+                })
             })
             .then(response => response.json())
             .then(data => {

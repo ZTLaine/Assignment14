@@ -51,7 +51,15 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 if (data.ok) {
                     sessionStorage.setItem('username', username);
-                    window.location.href = '/channels';
+                    fetch('/welcome/session', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ username: username })
+                    }).then(() => {
+                        window.location.href = '/channels';
+                    });
                 } else if (data.result === 'ERROR') {
                     alert(data.message || 'Username already exists');
                     usernameInput.value = '';
